@@ -1,0 +1,9 @@
+setuptools
+wheel
+numpy
+micromlgen
+pandas
+plotly
+scikit-learn
+ipython
+nbformat
