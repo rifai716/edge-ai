@@ -17,7 +17,7 @@ labels = ['Low', 'Medium', 'High']
 out = []
 
 # Predict the results for each row in X_test
-for i in range(0, 10):
+for i in range(0, len(X_test)):
     start_time = time.time()
     hasil = svc_model.predict([X_test.values[i]])
     end_time = time.time()
@@ -34,7 +34,7 @@ ser = serial.Serial('/dev/cu.usbserial-0001', 115200, timeout=1)  # Ganti dengan
 time.sleep(2)
 
 # Kirim data dan terima respons dari Arduino
-for i in range(0, 10):
+for i in range(0, len(X_test)):
     data_array = np.array(X_test.values[i])
     data_string = ",".join(map(str, data_array))
 
