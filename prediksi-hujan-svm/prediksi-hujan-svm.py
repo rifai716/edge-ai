@@ -22,7 +22,12 @@ for i in range(0, 10):
     hasil = svc_model.predict([X_test.values[i]])
     end_time = time.time()
     execution_time = end_time - start_time
-    out.append([i+1, X_test.values[i], y_test.values[i][0], int(hasil[0]), execution_time])
+
+    # Konversi array menjadi list agar tiap elemen terpisah
+    input_data_list = X_test.values[i].tolist()
+
+    # Tambahkan ke 'out' dengan format yang diinginkan
+    out.append([i+1] + input_data_list + [y_test.values[i][0], hasil[0], execution_time])
 
 # Buka komunikasi serial
 ser = serial.Serial('/dev/cu.usbserial-0001', 115200, timeout=1)  # Ganti dengan port yang sesuai di komputer Anda
@@ -45,8 +50,8 @@ for i in range(0, 10):
     arr = response.split(";")  # Pecah respons menjadi bagian-bagian
 
     # Tambahkan hasil respons Arduino ke elemen out yang sesuai
-    out[i].append(int(arr[0]))
-    out[i].append(float(arr[1]))  # Pastikan format sesuai, int untuk prediksi dan float untuk waktu
+    out[i].append(int(arr[0]))  # Arduino Predicted Class
+    out[i].append(float(arr[1]))  # Arduino Execution Time
 
 # Tutup serial
 ser.close()
@@ -54,9 +59,10 @@ ser.close()
 # Cetak hasil akhir
 print("-----OUTPUT-----")
 for entry in out:
-    print(entry)
+    print(",".join(map(str, entry)))
 
-df = pd.DataFrame(out, columns=['Data ke', 'Input Data', 'Actual Class', 'Predicted Class', 'Execution Time', 'Arduino Prediction', 'Arduino Execution Time'])
+# Simpan hasil ke dalam DataFrame
+df = pd.DataFrame(out, columns=['Data ke', 'Suhu Min', 'Suhu Max', 'Curah Hujan (mm)', 'Kategori Curah Hujan', 'Kategori Hujan (num)', 'Arah Angin', 'Actual Class', 'Predicted Class', 'Execution Time', 'Arduino Prediction', 'Arduino Execution Time'])
 
 # Save the DataFrame to a CSV file
 df.to_csv('output.csv', index=False)
