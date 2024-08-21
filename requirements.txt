@@ -7,3 +7,6 @@ plotly
 scikit-learn
 ipython
 nbformat
+matplotlib
+openpyxl
+joblib
