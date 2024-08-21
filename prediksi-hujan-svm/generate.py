@@ -9,7 +9,7 @@ import time
 import joblib
 import micromlgen
 
-file_path = 'dataset/forecasting_rainfall_dataset.xlsx'  # Replace with your file path
+file_path = '../dataset/forecasting_rainfall_dataset.xlsx'  # Replace with your file path
 data = pd.read_excel(file_path)
 
 # Categorize 'Suhu Rata-rata (°C)' into 3 classes: Low, Medium, High

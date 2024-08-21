@@ -10,3 +10,4 @@ nbformat
 matplotlib
 openpyxl
 joblib
+pyserial
