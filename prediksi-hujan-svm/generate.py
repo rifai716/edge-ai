@@ -61,3 +61,4 @@ with open('SVMClassifierHujan.h', 'w') as file:
     file.write(micromlgen.port(svc_model))
 
 X_test.to_csv('X_test-SVMClassifierHujan.csv', index=False)
+y_test.to_csv('y_test-SVMClassifierHujan.csv', index=False)

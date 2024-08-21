@@ -7,11 +7,9 @@ import serial
 # Impor model dari file
 svc_model = joblib.load('SVMClassifierHujan.pkl')
 
-# hasil = svc_model.predict([[24.8, 33.0, 0.0, 4.0, 0.0, 1.0]])
-# print(hasil)
-
 # Load the CSV file
 X_test = pd.read_csv('X_test-SVMClassifierHujan.csv')
+y_test = pd.read_csv('y_test-SVMClassifierHujan.csv')
 
 # Define the labels for the predicted classes
 labels = ['Low', 'Medium', 'High']
@@ -24,33 +22,43 @@ for i in range(0, 10):
     hasil = svc_model.predict([X_test.values[i]])
     end_time = time.time()
     execution_time = end_time - start_time
-    print(f"Data ke-{i+1}: {X_test.values[i]}, Prediksi: {labels[hasil[0]]}, Waktu eksekusi: {execution_time:.6f} detik")
-    out.append([i+1, X_test.values[i], hasil[0], execution_time])
+    out.append([i+1, X_test.values[i], y_test.values[i][0], int(hasil[0]), execution_time])
 
-# print(out)
-
-ser = serial.Serial('/dev/cu.usbserial-0001', 115200, timeout=1)  # Ganti 'COM3' dengan port yang sesuai di komputer Anda
+# Buka komunikasi serial
+ser = serial.Serial('/dev/cu.usbserial-0001', 115200, timeout=1)  # Ganti dengan port yang sesuai di komputer Anda
 time.sleep(2)
 
+# Kirim data dan terima respons dari Arduino
 for i in range(0, 10):
     data_array = np.array(X_test.values[i])
     data_string = ",".join(map(str, data_array))
-    # print(data_string)
+
+    # Kirim data_string melalui serial
     ser.write(data_string.encode())
+
+    # Tunggu sampai ada respons dari Arduino
     while ser.in_waiting == 0:
-        pass  # Tunggu sampai ada data masuk
+        pass
 
     # Baca respons dari Arduino
     response = ser.readline().decode().strip()
-    print(f"Arduino Response: {response}")
-    arr = response.split(";")
-    out[i].append([arr[0], arr[1]])
+    arr = response.split(";")  # Pecah respons menjadi bagian-bagian
 
-    # Berikan jeda jika perlu
-    time.sleep(1)
+    # Tambahkan hasil respons Arduino ke elemen out yang sesuai
+    out[i].append(int(arr[0]))
+    out[i].append(float(arr[1]))  # Pastikan format sesuai, int untuk prediksi dan float untuk waktu
 
+# Tutup serial
 ser.close()
-print("-----OUTPUT-----")
-print(out)
-print("-------SELESAI--------")
 
+# Cetak hasil akhir
+print("-----OUTPUT-----")
+for entry in out:
+    print(entry)
+
+df = pd.DataFrame(out, columns=['Data ke', 'Input Data', 'Actual Class', 'Predicted Class', 'Execution Time', 'Arduino Prediction', 'Arduino Execution Time'])
+
+# Save the DataFrame to a CSV file
+df.to_csv('output.csv', index=False)
+
+print("-------SELESAI--------")
