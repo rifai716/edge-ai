@@ -48,6 +48,7 @@ for i in range(0, len(X_test)):
     # Baca respons dari Arduino
     response = ser.readline().decode().strip()
     arr = response.split(";")  # Pecah respons menjadi bagian-bagian
+    print(f'Data ke-{i+1}, Predict: {arr[0]}, Waktu eksekusi: {arr[1]}')
 
     # Tambahkan hasil respons Arduino ke elemen out yang sesuai
     out[i].append(int(arr[0]))  # Arduino Predicted Class

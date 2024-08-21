@@ -36,5 +36,5 @@ void loop() {
     Serial.print(";");
     Serial.println(intervalTimeSeconds, 6);
   }
-  delay(1000);
+  delay(1);
 }
