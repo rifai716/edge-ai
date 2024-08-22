@@ -11,3 +11,4 @@ matplotlib
 openpyxl
 joblib
 pyserial
+seaborn
