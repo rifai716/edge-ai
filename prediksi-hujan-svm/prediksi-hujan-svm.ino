@@ -25,11 +25,11 @@ void loop() {
     }
 
     // Lakukan prediksi
-    long startTime = millis();
+    long startTime = micros();
     int result = classifier.predict(X_1);
-    long intervalTime = millis() - startTime;
+    long intervalTime = micros() - startTime;
     // Konversi millis() ke detik
-    float intervalTimeSeconds = intervalTime / 1000.0;
+    float intervalTimeSeconds = intervalTime / 1000000.0;
 
     // Kirim hasil dan waktu eksekusi melalui Serial
     Serial.print(result);
