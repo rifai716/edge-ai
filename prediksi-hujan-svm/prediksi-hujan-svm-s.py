@@ -27,7 +27,7 @@ for i in range(0, len(X_test)):
     input_data_list = X_test.values[i].tolist()
 
     # Tambahkan ke 'out' dengan format yang diinginkan
-    out.append([i+1] + input_data_list + [y_test.values[i][0], hasil[0], execution_time * 1000])
+    out.append([i+1] + input_data_list + [y_test.values[i][0], hasil[0], execution_time])
 
 # Buka komunikasi serial
 ser = serial.Serial('/dev/cu.usbserial-0001', 115200, timeout=1)  # Ganti dengan port yang sesuai di komputer Anda
